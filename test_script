@@ -1,0 +1,72 @@
+
+# coding: utf-8
+
+# ## Validating Data
+
+# In[13]:
+
+
+#importing everything from the csvvalidator package
+from csvvalidator import *
+
+#Specify which fields the .csv needs to have
+field_names = ('age', 'sex', 'cp', 'trestbps', 'chol','fbs' )
+
+
+# In[14]:
+
+
+#create a validator object using these fields
+validator = CSVValidator(field_names)
+
+
+# In[15]:
+
+
+#writing some checks to make sure that specific fields
+#are where we expect them to be
+validator.add_value_check('age', int, 'EX1', 'Key must be a integer')
+validator.add_value_check('sex', int, 'EX2', 'Key must be a integer')
+validator.add_value_check('cp', int, 'EX3', 'Key must be a integer')
+validator.add_value_check('trestbps', int, 'EX4', 'Key must be a integer')
+validator.add_value_check('chol', int, 'EX5', 'Key must be a integer')
+validator.add_value_check('fbs', int, 'EX6', 'Key must be a integer')
+
+
+# In[16]:
+
+
+import csv 
+from io import StringIO
+#validating dataset
+
+#sample csv
+good_data = StringIO("""age, sex, cp, trestbps, chol,fbs,
+notes
+"11,1,0,156,250,0
+""")
+
+#read text in as a csv
+test_csv = csv.reader(good_data)
+
+#validate our good csv
+validator.validate(test_csv)
+
+
+# In[17]:
+
+
+#bad dataset with issues, should throw helpful exceptions
+#sample csv
+bad_data = StringIO("""age, sex, cp, trestbps, chol, fbs
+1j, fgh, 2, 345r, 250, 0
+""")
+
+#read text in as a csv
+test_csv = csv.reader(bad_data)
+
+#validate our bad csv (generating errors)
+validator.validate(test_csv)
+
+
+
